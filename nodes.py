@@ -65,25 +65,25 @@ import scripts.reactor_sfw as sfw
 models_dir = folder_paths.models_dir
 REACTOR_MODELS_PATH = os.path.join(models_dir, "reactor")
 FACE_MODELS_PATH = os.path.join(REACTOR_MODELS_PATH, "faces")
-NSFWDET_MODEL_PATH = os.path.join(models_dir, "nsfw_detector","vit-base-nsfw-detector")
+# NSFWDET_MODEL_PATH = os.path.join(models_dir, "nsfw_detector","vit-base-nsfw-detector")
 
 if not os.path.exists(REACTOR_MODELS_PATH):
     os.makedirs(REACTOR_MODELS_PATH)
     if not os.path.exists(FACE_MODELS_PATH):
         os.makedirs(FACE_MODELS_PATH)
-
-if not os.path.exists(NSFWDET_MODEL_PATH):
-    os.makedirs(NSFWDET_MODEL_PATH)
-    nd_urls = [
-        "https://huggingface.co/AdamCodd/vit-base-nsfw-detector/resolve/main/config.json",
-        "https://huggingface.co/AdamCodd/vit-base-nsfw-detector/resolve/main/confusion_matrix.png",
-        "https://huggingface.co/AdamCodd/vit-base-nsfw-detector/resolve/main/model.safetensors",
-        "https://huggingface.co/AdamCodd/vit-base-nsfw-detector/resolve/main/preprocessor_config.json",
-    ]
-    for model_url in nd_urls:
-        model_name = os.path.basename(model_url)
-        model_path = os.path.join(NSFWDET_MODEL_PATH, model_name)
-        download(model_url, model_path, model_name)
+# Removed NSFW model download
+#if not os.path.exists(NSFWDET_MODEL_PATH):
+#    os.makedirs(NSFWDET_MODEL_PATH)
+ #   nd_urls = [
+ #       "https://huggingface.co/AdamCodd/vit-base-nsfw-detector/resolve/main/config.json",
+ #       "https://huggingface.co/AdamCodd/vit-base-nsfw-detector/resolve/main/confusion_matrix.png",
+ #       "https://huggingface.co/AdamCodd/vit-base-nsfw-detector/resolve/main/model.safetensors",
+ #       "https://huggingface.co/AdamCodd/vit-base-nsfw-detector/resolve/main/preprocessor_config.json",
+#    ]
+#    for model_url in nd_urls:
+#        model_name = os.path.basename(model_url)
+#        model_path = os.path.join(NSFWDET_MODEL_PATH, model_name)
+#        download(model_url, model_path, model_name)
 
 dir_facerestore_models = os.path.join(models_dir, "facerestore_models")
 os.makedirs(dir_facerestore_models, exist_ok=True)
@@ -361,19 +361,19 @@ class reactor:
         pil_images = batch_tensor_to_pil(input_image)
 
         # NSFW checker
-        logger.status("Checking for any unsafe content")
-        pil_images_sfw = []
-        tmp_img = "reactor_tmp.png"
-        for img in pil_images:
-            if state.interrupted or model_management.processing_interrupted():
-                logger.status("Interrupted by User")
-                break
-            img.save(tmp_img)
-            if not sfw.nsfw_image(tmp_img, NSFWDET_MODEL_PATH):
-                pil_images_sfw.append(img)
-        if os.path.exists(tmp_img):
-            os.remove(tmp_img)
-        pil_images = pil_images_sfw
+#        logger.status("Checking for any unsafe content")
+#        pil_images_sfw = []
+#        tmp_img = "reactor_tmp.png"
+#        for img in pil_images:
+#            if state.interrupted or model_management.processing_interrupted():
+ #               logger.status("Interrupted by User")
+ #               break
+ #           img.save(tmp_img)
+ #           if not sfw.nsfw_image(tmp_img, NSFWDET_MODEL_PATH):
+ #               pil_images_sfw.append(img)
+ #       if os.path.exists(tmp_img):
+ #           os.remove(tmp_img)
+ #       pil_images = pil_images_sfw
         # # #
 
         if len(pil_images) > 0:
